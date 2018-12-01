@@ -1,11 +1,8 @@
 package cmd
 
 import (
-	"bufio"
 	"fmt"
-	"log"
 	"os"
-	"strconv"
 
 	"github.com/spf13/cobra"
 )
@@ -34,8 +31,6 @@ func Execute() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-
-	calculate()
 }
 
 func init() {
@@ -44,56 +39,4 @@ func init() {
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-}
-
-const check_occurences = true
-const filename = "input.txt"
-
-func calculate() {
-
-	numbers := read_file(filename)
-
-	current := 0
-	occurrences := make(map[int]int)
-
-	found := false
-
-	for !found {
-		for _, number := range numbers {
-			current = current + number
-			if check_occurences {
-				occurrences[current]++
-				if occurrences[current] > 1 {
-					fmt.Printf("%s%d", "first duplicate occurence is: ", current)
-					os.Exit(0)
-				}
-			}
-		}
-	}
-
-	fmt.Println(current)
-
-}
-
-func read_file(filename string) []int {
-	file, err := os.Open(filename)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-
-	var numbers []int
-
-	for scanner.Scan() {
-		number, err := strconv.Atoi(scanner.Text())
-		if err != nil {
-			log.Fatal(err)
-			os.Exit(2)
-		}
-		numbers = append(numbers, number)
-	}
-
-	return numbers
 }
