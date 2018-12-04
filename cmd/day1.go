@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 
@@ -21,7 +19,7 @@ var day1 = &cobra.Command{
 
 func calculate(ccmd *cobra.Command, args []string) {
 
-	numbers := read_file(filename)
+	lines := read_file(filename)
 
 	current := 0
 	occurrences := make(map[int]int)
@@ -29,7 +27,8 @@ func calculate(ccmd *cobra.Command, args []string) {
 	found := false
 
 	for !found {
-		for _, number := range numbers {
+		for _, line := range lines {
+			number, _ := strconv.Atoi(line)
 			current = current + number
 			if check_occurences {
 				occurrences[current]++
@@ -43,29 +42,6 @@ func calculate(ccmd *cobra.Command, args []string) {
 
 	fmt.Println(current)
 
-}
-
-func read_file(filename string) []int {
-	file, err := os.Open(filename)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-
-	var numbers []int
-
-	for scanner.Scan() {
-		number, err := strconv.Atoi(scanner.Text())
-		if err != nil {
-			log.Fatal(err)
-			os.Exit(2)
-		}
-		numbers = append(numbers, number)
-	}
-
-	return numbers
 }
 
 func init() {
